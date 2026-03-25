@@ -934,30 +934,54 @@ var InvoiceUI = {
     var items = cartList.querySelectorAll('.cart-item');
     if (!items.length) { showToast('السلة فارغة', 'warn'); return; }
     try {
-      var stockById = {};
-      var allDrugs = await DataService.getAll();
-      allDrugs.forEach(function(d) { stockById[d.id] = d.qty || 0; });
-
-      var toDeduct = [];
+      var cartLines = [];
       for (var i = 0; i < items.length; i++) {
         var item  = items[i];
-        var drugId = item.dataset.drugId;
+        var drugId = (item.dataset.drugId || '').trim();
         var qty   = parseInt((item.querySelector('.qty-val') || {}).textContent) || 1;
-        if (!drugId || !stockById.hasOwnProperty(drugId)) {
-          throw new Error('يوجد صنف غير صالح في السلة (Drug ID مفقود)');
-        }
-        if (qty <= 0) {
-          throw new Error('يوجد كمية غير صالحة في السلة');
-        }
-        if (stockById[drugId] < qty) {
-          throw new Error('المخزون غير كافٍ لأحد الأصناف');
-        }
-        stockById[drugId] -= qty; // تحقق مسبق شامل قبل أي خصم فعلي
-        toDeduct.push({ drugId: drugId, qty: qty });
+        var unitPrice = parseInt(item.dataset.price) ||
+          parseInt((item.querySelector('.cart-item-price') || {}).textContent.replace(/[^0-9]/g,'')) || 0;
+        if (!drugId) throw new Error('عنصر سلة غير صالح: drugId مفقود');
+        if (qty <= 0) throw new Error('عنصر سلة غير صالح: الكمية يجب أن تكون أكبر من صفر');
+        cartLines.push({ drugId: drugId, qty: qty, unitPrice: unitPrice });
       }
 
-      for (var j = 0; j < toDeduct.length; j++) {
-        await DataService.decrementQty(toDeduct[j].drugId, toDeduct[j].qty);
+      var allDrugs = await DataService.getAll();
+      var stockByDrug = {};
+      for (var j = 0; j < allDrugs.length; j++) stockByDrug[allDrugs[j].id] = allDrugs[j].qty || 0;
+
+      var requiredByDrug = {};
+      for (var k = 0; k < cartLines.length; k++) {
+        var line = cartLines[k];
+        requiredByDrug[line.drugId] = (requiredByDrug[line.drugId] || 0) + line.qty;
+      }
+      for (var id in requiredByDrug) {
+        if (!Object.prototype.hasOwnProperty.call(requiredByDrug, id)) continue;
+        if (typeof stockByDrug[id] !== 'number') throw new Error('الدواء غير موجود');
+        if (stockByDrug[id] < requiredByDrug[id]) throw new Error('الكمية غير كافية في المخزون');
+      }
+
+      var invoiceItems = [];
+      for (var m = 0; m < cartLines.length; m++) {
+        var cartLine = cartLines[m];
+        var deduction = await DataService.decrementQty(cartLine.drugId, cartLine.qty);
+        invoiceItems.push({
+          drugId: cartLine.drugId,
+          qty: cartLine.qty,
+          unitPrice: cartLine.unitPrice,
+          batchAllocation: (deduction && deduction.batchAllocation) ? deduction.batchAllocation : [],
+        });
+      }
+
+      if (invoiceItems.length) {
+        var now = new Date();
+        await DataService.addInvoice({
+          id: 'inv-' + now.getTime().toString(36),
+          number: '#' + now.getTime().toString().slice(-4),
+          createdAt: now.toISOString(),
+          status: 'confirmed',
+          items: invoiceItems,
+        });
       }
       // تفريغ السلة
       cartList.innerHTML = '';
