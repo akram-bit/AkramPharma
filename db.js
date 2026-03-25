@@ -149,7 +149,7 @@ const MOCK_DRUGS = [
 const LocalAdapter = (() => {
   // Runtime drug list — يبدأ بالـ mock ثم يتراكم التعديلات
   let _drugs = MOCK_DRUGS.map(d => ({ ...d, batches: (d.batches || []).map(b => ({...b})) }));
-  // Runtime invoices list — تخزين محلي بالذاكرة (للاستخدام الحالي فقط)
+  // Runtime invoices list — تخزين محلي في الذاكرة
   let _invoices = [];
 
   function _uid() {
@@ -158,6 +158,10 @@ const LocalAdapter = (() => {
 
   function _batchUid() {
     return 'b-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  }
+
+  function _invoiceUid() {
+    return 'inv-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
   }
 
   /**
@@ -288,10 +292,7 @@ const LocalAdapter = (() => {
       const sorted = _drugs[idx].batches
         .filter(b => b.qty > 0)
         .sort((a, b) => a.expiry.localeCompare(b.expiry));
-      const available = sorted.reduce((s, b) => s + (b.qty || 0), 0);
-      if (available < amount) {
-        throw new Error('الكمية غير كافية في المخزون');
-      }
+      const batchAllocation = [];
       let remaining = amount;
       const batchAllocation = [];
       for (const sortedBatch of sorted) {
@@ -300,6 +301,9 @@ const LocalAdapter = (() => {
         if (!orig) continue;
         const take = Math.min(orig.qty, remaining);
         orig.qty -= take;
+        if (take > 0) {
+          batchAllocation.push({ batchId: orig.id, qty: take });
+        }
         remaining -= take;
         if (take > 0) batchAllocation.push({ batchId: orig.id, qty: take });
       }
@@ -310,27 +314,53 @@ const LocalAdapter = (() => {
       };
     },
 
-    /** حفظ فاتورة مؤكدة في الذاكرة */
-    async addInvoice(invoice) {
-      _invoices.unshift({
-        ...invoice,
-        items: (invoice.items || []).map(it => ({
-          ...it,
-          batchAllocation: (it.batchAllocation || []).map(b => ({ ...b })),
-        })),
-      });
-      return { ..._invoices[0], items: _invoices[0].items.map(it => ({ ...it, batchAllocation: it.batchAllocation.map(b => ({ ...b })) })) };
+    /** حفظ فاتورة مؤكدة في التخزين المحلي */
+    async createInvoice(payload) {
+      const now = new Date().toISOString();
+      const invoice = {
+        id: _invoiceUid(),
+        status: 'confirmed',
+        confirmedAt: now,
+        refundedAt: null,
+        ...payload,
+      };
+      _invoices.unshift(JSON.parse(JSON.stringify(invoice)));
+      return JSON.parse(JSON.stringify(invoice));
     },
 
-    /** جلب الفواتير المخزنة محلياً */
+    /** جلب الفواتير من التخزين المحلي */
     async getInvoices() {
-      return _invoices.map(inv => ({
-        ...inv,
-        items: (inv.items || []).map(it => ({
-          ...it,
-          batchAllocation: (it.batchAllocation || []).map(b => ({ ...b })),
-        })),
-      }));
+      return JSON.parse(JSON.stringify(_invoices));
+    },
+
+    /** استرجاع فاتورة مؤكدة: يعيد الكميات لنفس batch IDs */
+    async refundInvoice(invoiceId) {
+      const idx = _invoices.findIndex(inv => inv.id === invoiceId);
+      if (idx === -1) throw new Error('الفاتورة غير موجودة');
+
+      const invoice = _invoices[idx];
+      if (invoice.status !== 'confirmed') {
+        if (invoice.status === 'refunded') throw new Error('تم استرجاع هذه الفاتورة مسبقاً');
+        throw new Error('يمكن استرجاع الفواتير المؤكدة فقط');
+      }
+
+      (invoice.items || []).forEach(item => {
+        const drugIdx = _drugs.findIndex(d => d.id === item.drugId);
+        if (drugIdx === -1) throw new Error('تعذر العثور على دواء ضمن الفاتورة');
+
+        (item.batchAllocation || []).forEach(alloc => {
+          const batch = (_drugs[drugIdx].batches || []).find(b => b.id === alloc.batchId);
+          if (!batch) throw new Error('تعذر العثور على الدفعة الأصلية للاسترجاع');
+          batch.qty = (batch.qty || 0) + (alloc.qty || 0);
+        });
+
+        _drugs[drugIdx].updatedAt = new Date().toISOString();
+      });
+
+      invoice.status = 'refunded';
+      invoice.refundedAt = new Date().toISOString();
+      _invoices[idx] = invoice;
+      return JSON.parse(JSON.stringify(invoice));
     },
 
     /** إحصائيات للـ Dashboard */
@@ -467,6 +497,9 @@ const DataService = (() => {
     addInvoice:         (...a) => _adapter.addInvoice(...a),
     getInvoices:        (...a) => _adapter.getInvoices(...a),
     getStats:           (...a) => _adapter.getStats(...a),
+    createInvoice:      (...a) => _adapter.createInvoice(...a),
+    getInvoices:        (...a) => _adapter.getInvoices(...a),
+    refundInvoice:      (...a) => _adapter.refundInvoice(...a),
   };
 })();
 
