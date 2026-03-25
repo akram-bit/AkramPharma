@@ -943,6 +943,8 @@ var InvoiceUI = {
         var item  = items[i];
         var drugId = item.dataset.drugId;
         var qty   = parseInt((item.querySelector('.qty-val') || {}).textContent) || 1;
+        var unitPrice = parseInt(item.dataset.price) ||
+          parseInt((item.querySelector('.cart-item-price') || {}).textContent.replace(/[^0-9]/g, '')) || 0;
         if (!drugId || !stockById.hasOwnProperty(drugId)) {
           throw new Error('يوجد صنف غير صالح في السلة (Drug ID مفقود)');
         }
@@ -953,12 +955,24 @@ var InvoiceUI = {
           throw new Error('المخزون غير كافٍ لأحد الأصناف');
         }
         stockById[drugId] -= qty; // تحقق مسبق شامل قبل أي خصم فعلي
-        toDeduct.push({ drugId: drugId, qty: qty });
+        toDeduct.push({ drugId: drugId, qty: qty, unitPrice: unitPrice });
       }
 
+      var deductedItems = [];
       for (var j = 0; j < toDeduct.length; j++) {
-        await DataService.decrementQty(toDeduct[j].drugId, toDeduct[j].qty);
+        var line = toDeduct[j];
+        var deductRes = await DataService.decrementQty(line.drugId, line.qty);
+        deductedItems.push({
+          drugId: line.drugId,
+          qty: line.qty,
+          unitPrice: line.unitPrice,
+          batchAllocation: (deductRes && deductRes.batchAllocation) ? deductRes.batchAllocation : [],
+        });
       }
+
+      await DataService.createInvoice({
+        items: deductedItems,
+      });
       // تفريغ السلة
       cartList.innerHTML = '';
       updateCartCount();
@@ -967,6 +981,15 @@ var InvoiceUI = {
       showToast('تم حفظ الفاتورة بنجاح ✓', 'success');
     } catch(e) {
       showToast('خطأ في تأكيد الفاتورة: ' + e.message, 'error');
+    }
+  },
+
+  refund: async function(invoiceId) {
+    try {
+      await DataService.refundInvoice(invoiceId);
+      showToast('تم استرجاع الفاتورة بنجاح ✓', 'success');
+    } catch(e) {
+      showToast('خطأ في استرجاع الفاتورة: ' + e.message, 'error');
     }
   },
 };
