@@ -281,7 +281,10 @@ const LocalAdapter = (() => {
      */
     async decrementQty(id, amount = 1) {
       const idx = _drugs.findIndex(d => d.id === id);
-      if (idx === -1) return;
+      if (idx === -1) throw new Error('الدواء غير موجود');
+      if (amount <= 0) throw new Error('الكمية المطلوبة غير صالحة');
+      const availableQty = (_drugs[idx].batches || []).reduce((s, b) => s + (b.qty || 0), 0);
+      if (availableQty < amount) throw new Error('المخزون غير كافٍ');
       // ترتيب الدفعات حسب الأقرب انتهاء أولاً (FEFO)
       const sorted = _drugs[idx].batches
         .filter(b => b.qty > 0)
