@@ -149,6 +149,8 @@ const MOCK_DRUGS = [
 const LocalAdapter = (() => {
   // Runtime drug list — يبدأ بالـ mock ثم يتراكم التعديلات
   let _drugs = MOCK_DRUGS.map(d => ({ ...d, batches: (d.batches || []).map(b => ({...b})) }));
+  // Runtime invoices list — تخزين محلي بالذاكرة (للاستخدام الحالي فقط)
+  let _invoices = [];
 
   function _uid() {
     return 'drug-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
@@ -281,12 +283,17 @@ const LocalAdapter = (() => {
      */
     async decrementQty(id, amount = 1) {
       const idx = _drugs.findIndex(d => d.id === id);
-      if (idx === -1) return;
+      if (idx === -1) throw new Error('الدواء غير موجود');
       // ترتيب الدفعات حسب الأقرب انتهاء أولاً (FEFO)
       const sorted = _drugs[idx].batches
         .filter(b => b.qty > 0)
         .sort((a, b) => a.expiry.localeCompare(b.expiry));
+      const available = sorted.reduce((s, b) => s + (b.qty || 0), 0);
+      if (available < amount) {
+        throw new Error('الكمية غير كافية في المخزون');
+      }
       let remaining = amount;
+      const batchAllocation = [];
       for (const sortedBatch of sorted) {
         if (remaining <= 0) break;
         const orig = _drugs[idx].batches.find(b => b.id === sortedBatch.id);
@@ -294,9 +301,36 @@ const LocalAdapter = (() => {
         const take = Math.min(orig.qty, remaining);
         orig.qty -= take;
         remaining -= take;
+        if (take > 0) batchAllocation.push({ batchId: orig.id, qty: take });
       }
       _drugs[idx].updatedAt = new Date().toISOString();
-      return _normalizeDrug({ ..._drugs[idx], batches: _drugs[idx].batches.map(b=>({...b})) });
+      return {
+        drug: _normalizeDrug({ ..._drugs[idx], batches: _drugs[idx].batches.map(b => ({ ...b })) }),
+        batchAllocation,
+      };
+    },
+
+    /** حفظ فاتورة مؤكدة في الذاكرة */
+    async addInvoice(invoice) {
+      _invoices.unshift({
+        ...invoice,
+        items: (invoice.items || []).map(it => ({
+          ...it,
+          batchAllocation: (it.batchAllocation || []).map(b => ({ ...b })),
+        })),
+      });
+      return { ..._invoices[0], items: _invoices[0].items.map(it => ({ ...it, batchAllocation: it.batchAllocation.map(b => ({ ...b })) })) };
+    },
+
+    /** جلب الفواتير المخزنة محلياً */
+    async getInvoices() {
+      return _invoices.map(inv => ({
+        ...inv,
+        items: (inv.items || []).map(it => ({
+          ...it,
+          batchAllocation: (it.batchAllocation || []).map(b => ({ ...b })),
+        })),
+      }));
     },
 
     /** إحصائيات للـ Dashboard */
@@ -430,6 +464,8 @@ const DataService = (() => {
     update:             (...a) => _adapter.update(...a),
     remove:             (...a) => _adapter.remove(...a),
     decrementQty:       (...a) => _adapter.decrementQty(...a),
+    addInvoice:         (...a) => _adapter.addInvoice(...a),
+    getInvoices:        (...a) => _adapter.getInvoices(...a),
     getStats:           (...a) => _adapter.getStats(...a),
   };
 })();
