@@ -70,6 +70,7 @@ async function _onScreenEnter(screenId, params) {
     case 'screen-dashboard':  await DashboardUI.refresh(); break;
     case 'screen-add-drug':   AddDrugUI.init(params); break;
     case 'screen-sales':      await SalesUI.load(); break;
+    case 'screen-invoices':   await InvoiceHistoryUI.load(); break;
     case 'screen-reports':    setTimeout(animateCharts, 100); break;
   }
 }
@@ -975,10 +976,11 @@ var InvoiceUI = {
 
       if (invoiceItems.length) {
         var now = new Date();
-        await DataService.addInvoice({
+        await DataService.createInvoice({
           id: 'inv-' + now.getTime().toString(36),
           number: '#' + now.getTime().toString().slice(-4),
           createdAt: now.toISOString(),
+          confirmedAt: now.toISOString(),
           status: 'confirmed',
           items: invoiceItems,
         });
@@ -992,6 +994,95 @@ var InvoiceUI = {
     } catch(e) {
       showToast('خطأ في تأكيد الفاتورة: ' + e.message, 'error');
     }
+  },
+};
+
+var InvoiceHistoryUI = {
+  load: async function() {
+    var invoices = await DataService.getInvoices();
+    this.render(invoices || []);
+  },
+
+  render: function(invoices) {
+    var list = document.getElementById('invoice-history-list');
+    if (!list) return;
+
+    var totalAmount = 0;
+    for (var i = 0; i < invoices.length; i++) {
+      var inv = invoices[i];
+      totalAmount += this._invoiceTotal(inv);
+    }
+    var avgAmount = invoices.length ? Math.round(totalAmount / invoices.length) : 0;
+    var countEl = document.getElementById('inv-summary-count');
+    var totalEl = document.getElementById('inv-summary-total');
+    var avgEl = document.getElementById('inv-summary-avg');
+    if (countEl) countEl.textContent = invoices.length.toLocaleString('ar-SY');
+    if (totalEl) totalEl.textContent = totalAmount.toLocaleString('ar-SY');
+    if (avgEl) avgEl.textContent = avgAmount.toLocaleString('ar-SY');
+
+    if (!invoices.length) {
+      list.innerHTML = '<div class="empty-state"><div class="empty-title">لا توجد فواتير بعد</div><div class="empty-sub">ستظهر الفواتير المؤكدة هنا</div></div>';
+      return;
+    }
+
+    var self = this;
+    list.innerHTML = invoices.map(function(inv) {
+      var statusInfo = self._statusInfo(inv.status);
+      var amount = self._invoiceTotal(inv);
+      var when = self._statusDateLabel(inv);
+      var itemsCount = (inv.items || []).reduce(function(s, it) { return s + (parseInt(it.qty,10) || 0); }, 0);
+      return '<div class="invoice-item" onclick="showToast(\'عرض تفاصيل الفاتورة '+(inv.number || '')+'\')">' +
+        '<div class="inv-num-col">' +
+          '<div class="inv-num">' + (inv.number || '#----') + '</div>' +
+          '<div class="inv-time">' + self._formatTime(inv.createdAt) + '</div>' +
+        '</div>' +
+        '<div class="inv-details">' +
+          '<div class="inv-customer">عميل عام</div>' +
+          '<div class="inv-items">' + itemsCount + ' أصناف' + (when ? ' • ' + when : '') + '</div>' +
+        '</div>' +
+        '<div class="inv-right">' +
+          '<div class="inv-amount">' + amount.toLocaleString('ar-SY') + '</div>' +
+          '<span class="inv-status ' + statusInfo.className + '">' + statusInfo.label + '</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  },
+
+  _invoiceTotal: function(inv) {
+    return (inv.items || []).reduce(function(sum, it) {
+      var qty = parseInt(it.qty, 10) || 0;
+      var unitPrice = parseInt(it.unitPrice, 10) || 0;
+      return sum + (qty * unitPrice);
+    }, 0);
+  },
+
+  _statusInfo: function(status) {
+    if (status === 'refunded') return { className: 'refund', label: 'مرتجعة' };
+    return { className: 'paid', label: 'مؤكدة' };
+  },
+
+  _statusDateLabel: function(inv) {
+    if (inv.status === 'refunded' && inv.refundedAt) {
+      return 'استرجاع: ' + this._formatDateTime(inv.refundedAt);
+    }
+    if (inv.status === 'confirmed' && inv.confirmedAt) {
+      return 'تأكيد: ' + this._formatDateTime(inv.confirmedAt);
+    }
+    return '';
+  },
+
+  _formatTime: function(iso) {
+    if (!iso) return '--:--';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '--:--';
+    return d.toLocaleTimeString('ar-SY', { hour: '2-digit', minute: '2-digit' });
+  },
+
+  _formatDateTime: function(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleString('ar-SY', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
   },
 };
 

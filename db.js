@@ -287,7 +287,16 @@ const LocalAdapter = (() => {
       // ترتيب الدفعات حسب الأقرب انتهاء أولاً (FEFO)
       const sorted = _drugs[idx].batches
         .filter(b => b.qty > 0)
-        .sort((a, b) => a.expiry.localeCompare(b.expiry));
+        .sort((a, b) => {
+          const aExpiry = (a.expiry || '').trim();
+          const bExpiry = (b.expiry || '').trim();
+          const aHasDate = aExpiry !== '';
+          const bHasDate = bExpiry !== '';
+          if (aHasDate && bHasDate) return aExpiry.localeCompare(bExpiry);
+          if (aHasDate && !bHasDate) return -1;
+          if (!aHasDate && bHasDate) return 1;
+          return 0;
+        });
       const available = sorted.reduce((s, b) => s + (b.qty || 0), 0);
       if (available < amount) {
         throw new Error('الكمية غير كافية في المخزون');
@@ -310,8 +319,8 @@ const LocalAdapter = (() => {
       };
     },
 
-    /** حفظ فاتورة مؤكدة في الذاكرة */
-    async addInvoice(invoice) {
+    /** إنشاء فاتورة مؤكدة في الذاكرة */
+    async createInvoice(invoice) {
       _invoices.unshift({
         ...invoice,
         items: (invoice.items || []).map(it => ({
@@ -464,7 +473,7 @@ const DataService = (() => {
     update:             (...a) => _adapter.update(...a),
     remove:             (...a) => _adapter.remove(...a),
     decrementQty:       (...a) => _adapter.decrementQty(...a),
-    addInvoice:         (...a) => _adapter.addInvoice(...a),
+    createInvoice:      (...a) => _adapter.createInvoice(...a),
     getInvoices:        (...a) => _adapter.getInvoices(...a),
     getStats:           (...a) => _adapter.getStats(...a),
   };
