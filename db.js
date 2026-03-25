@@ -288,15 +288,13 @@ const LocalAdapter = (() => {
     async decrementQty(id, amount = 1) {
       const idx = _drugs.findIndex(d => d.id === id);
       if (idx === -1) throw new Error('الدواء غير موجود');
-      if (amount <= 0) throw new Error('الكمية المطلوبة غير صالحة');
-      const availableQty = (_drugs[idx].batches || []).reduce((s, b) => s + (b.qty || 0), 0);
-      if (availableQty < amount) throw new Error('المخزون غير كافٍ');
       // ترتيب الدفعات حسب الأقرب انتهاء أولاً (FEFO)
       const sorted = _drugs[idx].batches
         .filter(b => b.qty > 0)
         .sort((a, b) => a.expiry.localeCompare(b.expiry));
       const batchAllocation = [];
       let remaining = amount;
+      const batchAllocation = [];
       for (const sortedBatch of sorted) {
         if (remaining <= 0) break;
         const orig = _drugs[idx].batches.find(b => b.id === sortedBatch.id);
@@ -307,6 +305,7 @@ const LocalAdapter = (() => {
           batchAllocation.push({ batchId: orig.id, qty: take });
         }
         remaining -= take;
+        if (take > 0) batchAllocation.push({ batchId: orig.id, qty: take });
       }
       _drugs[idx].updatedAt = new Date().toISOString();
       return {
@@ -495,6 +494,8 @@ const DataService = (() => {
     update:             (...a) => _adapter.update(...a),
     remove:             (...a) => _adapter.remove(...a),
     decrementQty:       (...a) => _adapter.decrementQty(...a),
+    addInvoice:         (...a) => _adapter.addInvoice(...a),
+    getInvoices:        (...a) => _adapter.getInvoices(...a),
     getStats:           (...a) => _adapter.getStats(...a),
     createInvoice:      (...a) => _adapter.createInvoice(...a),
     getInvoices:        (...a) => _adapter.getInvoices(...a),

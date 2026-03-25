@@ -934,14 +934,10 @@ var InvoiceUI = {
     var items = cartList.querySelectorAll('.cart-item');
     if (!items.length) { showToast('السلة فارغة', 'warn'); return; }
     try {
-      var stockById = {};
-      var allDrugs = await DataService.getAll();
-      allDrugs.forEach(function(d) { stockById[d.id] = d.qty || 0; });
-
-      var toDeduct = [];
+      var cartLines = [];
       for (var i = 0; i < items.length; i++) {
         var item  = items[i];
-        var drugId = item.dataset.drugId;
+        var drugId = (item.dataset.drugId || '').trim();
         var qty   = parseInt((item.querySelector('.qty-val') || {}).textContent) || 1;
         var unitPrice = parseInt(item.dataset.price) ||
           parseInt((item.querySelector('.cart-item-price') || {}).textContent.replace(/[^0-9]/g, '')) || 0;
