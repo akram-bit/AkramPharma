@@ -775,106 +775,15 @@
 
         <!-- Summary Bar -->
         <div class="inv-summary-bar">
-          <div class="isb-item"><span class="isb-val">38</span><span class="isb-label">فاتورة</span></div>
+          <div class="isb-item"><span class="isb-val" id="inv-summary-count"></span><span class="isb-label">فاتورة</span></div>
           <div class="isb-divider"></div>
-          <div class="isb-item"><span class="isb-val teal">185,000</span><span class="isb-label">ل.س إجمالي</span></div>
+          <div class="isb-item"><span class="isb-val teal" id="inv-summary-total"></span><span class="isb-label">ل.س إجمالي</span></div>
           <div class="isb-divider"></div>
-          <div class="isb-item"><span class="isb-val green">4,868</span><span class="isb-label">ل.س متوسط</span></div>
+          <div class="isb-item"><span class="isb-val green" id="inv-summary-avg"></span><span class="isb-label">ل.س متوسط</span></div>
         </div>
 
         <!-- Invoice List -->
-        <div class="invoice-list">
-          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1083')">
-            <div class="inv-num-col">
-              <div class="inv-num">#1083</div>
-              <div class="inv-time">10:42 ص</div>
-            </div>
-            <div class="inv-details">
-              <div class="inv-customer">أحمد محمد</div>
-              <div class="inv-items">3 أصناف • نقداً</div>
-            </div>
-            <div class="inv-right">
-              <div class="inv-amount">12,500</div>
-              <span class="inv-status paid">مدفوع</span>
-            </div>
-          </div>
-
-          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1082')">
-            <div class="inv-num-col">
-              <div class="inv-num">#1082</div>
-              <div class="inv-time">10:15 ص</div>
-            </div>
-            <div class="inv-details">
-              <div class="inv-customer">عميل عام</div>
-              <div class="inv-items">1 صنف • نقداً</div>
-            </div>
-            <div class="inv-right">
-              <div class="inv-amount">8,000</div>
-              <span class="inv-status paid">مدفوع</span>
-            </div>
-          </div>
-
-          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1081')">
-            <div class="inv-num-col">
-              <div class="inv-num">#1081</div>
-              <div class="inv-time">09:50 ص</div>
-            </div>
-            <div class="inv-details">
-              <div class="inv-customer">ليلى خالد</div>
-              <div class="inv-items">5 أصناف • بطاقة</div>
-            </div>
-            <div class="inv-right">
-              <div class="inv-amount">27,300</div>
-              <span class="inv-status paid">مدفوع</span>
-            </div>
-          </div>
-
-          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1080')">
-            <div class="inv-num-col">
-              <div class="inv-num">#1080</div>
-              <div class="inv-time">09:20 ص</div>
-            </div>
-            <div class="inv-details">
-              <div class="inv-customer">عمر سامي</div>
-              <div class="inv-items">2 أصناف • آجل</div>
-            </div>
-            <div class="inv-right">
-              <div class="inv-amount">15,000</div>
-              <span class="inv-status pending">آجل</span>
-            </div>
-          </div>
-
-          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1079')">
-            <div class="inv-num-col">
-              <div class="inv-num">#1079</div>
-              <div class="inv-time">08:55 ص</div>
-            </div>
-            <div class="inv-details">
-              <div class="inv-customer">مريم علي</div>
-              <div class="inv-items">4 أصناف • تحويل</div>
-            </div>
-            <div class="inv-right">
-              <div class="inv-amount">33,200</div>
-              <span class="inv-status paid">مدفوع</span>
-            </div>
-          </div>
-
-          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1078')">
-            <div class="inv-num-col">
-              <div class="inv-num">#1078</div>
-              <div class="inv-time">أمس</div>
-            </div>
-            <div class="inv-details">
-              <div class="inv-customer">عميل عام</div>
-              <div class="inv-items">6 أصناف • نقداً</div>
-            </div>
-            <div class="inv-right">
-              <div class="inv-amount">42,800</div>
-              <span class="inv-status paid">مدفوع</span>
-            </div>
-          </div>
-
-        </div>
+        <div class="invoice-list" id="invoice-history-list"></div>
       </div>
     </div>
   </div>

@@ -291,8 +291,20 @@ const LocalAdapter = (() => {
       // ترتيب الدفعات حسب الأقرب انتهاء أولاً (FEFO)
       const sorted = _drugs[idx].batches
         .filter(b => b.qty > 0)
-        .sort((a, b) => a.expiry.localeCompare(b.expiry));
-      const batchAllocation = [];
+        .sort((a, b) => {
+          const aExpiry = (a.expiry || '').trim();
+          const bExpiry = (b.expiry || '').trim();
+          const aHasDate = aExpiry !== '';
+          const bHasDate = bExpiry !== '';
+          if (aHasDate && bHasDate) return aExpiry.localeCompare(bExpiry);
+          if (aHasDate && !bHasDate) return -1;
+          if (!aHasDate && bHasDate) return 1;
+          return 0;
+        });
+      const available = sorted.reduce((s, b) => s + (b.qty || 0), 0);
+      if (available < amount) {
+        throw new Error('الكمية غير كافية في المخزون');
+      }
       let remaining = amount;
       const batchAllocation = [];
       for (const sortedBatch of sorted) {
@@ -314,18 +326,16 @@ const LocalAdapter = (() => {
       };
     },
 
-    /** حفظ فاتورة مؤكدة في التخزين المحلي */
-    async createInvoice(payload) {
-      const now = new Date().toISOString();
-      const invoice = {
-        id: _invoiceUid(),
-        status: 'confirmed',
-        confirmedAt: now,
-        refundedAt: null,
-        ...payload,
-      };
-      _invoices.unshift(JSON.parse(JSON.stringify(invoice)));
-      return JSON.parse(JSON.stringify(invoice));
+    /** إنشاء فاتورة مؤكدة في الذاكرة */
+    async createInvoice(invoice) {
+      _invoices.unshift({
+        ...invoice,
+        items: (invoice.items || []).map(it => ({
+          ...it,
+          batchAllocation: (it.batchAllocation || []).map(b => ({ ...b })),
+        })),
+      });
+      return { ..._invoices[0], items: _invoices[0].items.map(it => ({ ...it, batchAllocation: it.batchAllocation.map(b => ({ ...b })) })) };
     },
 
     /** جلب الفواتير من التخزين المحلي */
@@ -494,7 +504,7 @@ const DataService = (() => {
     update:             (...a) => _adapter.update(...a),
     remove:             (...a) => _adapter.remove(...a),
     decrementQty:       (...a) => _adapter.decrementQty(...a),
-    addInvoice:         (...a) => _adapter.addInvoice(...a),
+    createInvoice:      (...a) => _adapter.createInvoice(...a),
     getInvoices:        (...a) => _adapter.getInvoices(...a),
     getStats:           (...a) => _adapter.getStats(...a),
     createInvoice:      (...a) => _adapter.createInvoice(...a),
