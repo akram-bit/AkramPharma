@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0B6B5A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>صيدليتي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="scanner.css">
+</head>
+<body>
+
+<!-- ===== SCREENS WRAPPER ===== -->
+<div id="app">
+
+  <!-- ============================================================ -->
+  <!-- 1. SPLASH SCREEN                                             -->
+  <!-- ============================================================ -->
+  <div class="screen active" id="screen-splash">
+    <div class="splash-bg">
+      <div class="splash-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+      </div>
+      <div class="splash-content">
+        <div class="splash-logo-wrap">
+          <div class="splash-logo">
+            <div class="logo-icon">
+              <i class="fa-solid fa-briefcase-medical"></i>
+            </div>
+          </div>
+          <div class="splash-badge">PRO</div>
+        </div>
+        <h1 class="splash-title">صيدليتي</h1>
+        <p class="splash-subtitle">نظام إدارة الصيدليات الذكي</p>
+        <div class="splash-features">
+          <span><i class="fa-solid fa-check-circle"></i> إدارة المخزون</span>
+          <span><i class="fa-solid fa-check-circle"></i> الفواتير الذكية</span>
+          <span><i class="fa-solid fa-check-circle"></i> تقارير متقدمة</span>
+        </div>
+        <button class="btn-primary btn-large" onclick="navigate('screen-login')">
+          <span>ابدأ الآن</span>
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <p class="splash-create">ليس لديك حساب؟ <a onclick="navigate('screen-register')">أنشئ صيدليتك</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 2. REGISTER SCREEN                                           -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-register">
+    <div class="auth-screen">
+      <div class="auth-header">
+        <button class="back-btn" onclick="navigate('screen-splash')">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <div class="auth-header-logo">
+          <div class="logo-icon-sm"><i class="fa-solid fa-briefcase-medical"></i></div>
+          <span>صيدليتي</span>
+        </div>
+      </div>
+      <div class="auth-body">
+        <div class="auth-title-block">
+          <h2>إنشاء صيدلية جديدة</h2>
+          <p>أدخل بيانات صيدليتك للبدء</p>
+        </div>
+        <div class="form-group">
+          <label>اسم الصيدلية</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-hospital-alt input-icon"></i>
+            <input type="text" placeholder="صيدلية النور" value="صيدلية الشفاء">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>اسم المالك</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-user-tie input-icon"></i>
+            <input type="text" placeholder="الاسم الكامل" value="أ. أكرم الحسن">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input type="email" placeholder="example@mail.com" value="akram@saydalati.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>رقم الهاتف</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-phone input-icon"></i>
+            <input type="tel" placeholder="09xxxxxxxx" value="0912345678">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" placeholder="••••••••" value="12345678">
+            <button class="input-action"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>تأكيد كلمة المرور</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" placeholder="••••••••" value="12345678">
+          </div>
+        </div>
+        <button class="btn-primary" onclick="navigate('screen-owner-setup')">
+          <i class="fa-solid fa-store"></i>
+          <span>إنشاء الصيدلية</span>
+        </button>
+        <p class="auth-switch">لديك حساب بالفعل؟ <a onclick="navigate('screen-login')">سجل دخولك</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 3. LOGIN SCREEN                                              -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-login">
+    <div class="auth-screen">
+      <div class="auth-header">
+        <button class="back-btn" onclick="navigate('screen-splash')">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <div class="auth-header-logo">
+          <div class="logo-icon-sm"><i class="fa-solid fa-briefcase-medical"></i></div>
+          <span>صيدليتي</span>
+        </div>
+      </div>
+      <div class="auth-body">
+        <div class="auth-title-block">
+          <h2>مرحباً بعودتك 👋</h2>
+          <p>سجّل دخولك للمتابعة</p>
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني أو رقم الهاتف</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input type="text" placeholder="أدخل بريدك أو هاتفك" value="akram@saydalati.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" placeholder="••••••••" value="12345678">
+            <button class="input-action"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="forgot-row">
+          <a onclick="showToast('سيتم إرسال رابط استعادة كلمة المرور')">نسيت كلمة المرور؟</a>
+        </div>
+        <button class="btn-primary" onclick="navigate('screen-dashboard')">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>تسجيل الدخول</span>
+        </button>
+        <div class="or-divider"><span>أو</span></div>
+        <p class="auth-switch">ليس لديك حساب؟ <a onclick="navigate('screen-register')">أنشئ صيدليتك الآن</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 4. OWNER SETUP SCREEN                                        -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-owner-setup">
+    <div class="setup-screen">
+      <div class="setup-header">
+        <div class="setup-step">خطوة 1 من 2</div>
+        <div class="setup-progress"><div class="setup-progress-fill" style="width:50%"></div></div>
+      </div>
+      <div class="setup-body">
+        <div class="setup-icon">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <h2>مرحباً بك في صيدليتك!</h2>
+        <p class="setup-subtitle">تم إنشاء صيدليتك بنجاح. تأكيد تفاصيل حساب المالك.</p>
+
+        <div class="info-card">
+          <div class="info-card-header">
+            <i class="fa-solid fa-store"></i>
+            <span>بيانات الصيدلية</span>
+          </div>
+          <div class="info-row"><span>الاسم</span><strong>صيدلية الشفاء</strong></div>
+          <div class="info-row"><span>المالك</span><strong>أ. أكرم الحسن</strong></div>
+          <div class="info-row"><span>البريد</span><strong>akram@saydalati.com</strong></div>
+          <div class="info-row"><span>الهاتف</span><strong>0912345678</strong></div>
+        </div>
+
+        <div class="owner-badge-card">
+          <div class="owner-badge-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="owner-badge-text">
+            <strong>حساب المالك الأساسي</strong>
+            <p>لديك صلاحية كاملة لإدارة الصيدلية، إضافة موظفين، وتحديد الصلاحيات.</p>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="navigate('screen-users')">
+          <span>متابعة لإدارة المستخدمين</span>
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <button class="btn-ghost" onclick="navigate('screen-dashboard')">
+          تخطي — الذهاب للوحة التحكم
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 5. USER MANAGEMENT SCREEN                                    -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-users">
+    <div class="inner-screen">
+      <div class="top-bar">
+        <button class="back-btn" onclick="navigate('screen-dashboard')">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <h1 class="top-bar-title">إدارة المستخدمين</h1>
+        <button class="icon-btn-primary" onclick="toggleModal('modal-add-user')">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="content-area">
+        <!-- Role Chips -->
+        <div class="chip-row">
+          <button class="chip active">الكل (3)</button>
+          <button class="chip">صيدلاني</button>
+          <button class="chip">مساعد</button>
+          <button class="chip">كاشير</button>
+        </div>
+
+        <!-- Users List -->
+        <div class="user-cards">
+          <div class="user-card">
+            <div class="user-avatar owner"><i class="fa-solid fa-crown"></i></div>
+            <div class="user-info">
+              <div class="user-name">أ. أكرم الحسن <span class="user-role-badge owner">مالك</span></div>
+              <div class="user-detail"><i class="fa-solid fa-envelope"></i> akram@saydalati.com</div>
+              <div class="user-detail"><i class="fa-solid fa-phone"></i> 0912345678</div>
+            </div>
+            <div class="user-status active-dot"></div>
+          </div>
+
+          <div class="user-card">
+            <div class="user-avatar pharmacist"><i class="fa-solid fa-user-nurse"></i></div>
+            <div class="user-info">
+              <div class="user-name">د. سارة خالد <span class="user-role-badge pharmacist">صيدلانية</span></div>
+              <div class="user-detail"><i class="fa-solid fa-envelope"></i> sara@saydalati.com</div>
+              <div class="user-detail"><i class="fa-solid fa-phone"></i> 0923456789</div>
+            </div>
+            <div class="user-actions-col">
+              <div class="user-status active-dot"></div>
+              <div class="user-card-actions">
+                <button class="action-icon-btn edit" onclick="showToast('تعديل بيانات المستخدم')"><i class="fa-solid fa-pen"></i></button>
+                <button class="action-icon-btn danger" onclick="showToast('تم تعطيل الحساب')"><i class="fa-solid fa-ban"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="user-card disabled-card">
+            <div class="user-avatar cashier"><i class="fa-solid fa-cash-register"></i></div>
+            <div class="user-info">
+              <div class="user-name">م. محمد علي <span class="user-role-badge cashier">كاشير</span></div>
+              <div class="user-detail"><i class="fa-solid fa-envelope"></i> mohamad@saydalati.com</div>
+              <div class="user-detail"><i class="fa-solid fa-phone"></i> 0934567890</div>
+            </div>
+            <div class="user-actions-col">
+              <div class="user-status inactive-dot"></div>
+              <div class="user-card-actions">
+                <button class="action-icon-btn success" onclick="showToast('تم تفعيل الحساب')"><i class="fa-solid fa-check"></i></button>
+                <button class="action-icon-btn danger" onclick="showToast('تم حذف المستخدم')"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Add User -->
+    <div class="modal-overlay" id="modal-add-user">
+      <div class="modal-sheet">
+        <div class="modal-handle"></div>
+        <div class="modal-header">
+          <h3>إضافة موظف جديد</h3>
+          <button class="modal-close" onclick="toggleModal('modal-add-user')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>الاسم الكامل</label>
+            <div class="input-wrap"><i class="fa-solid fa-user input-icon"></i><input type="text" placeholder="أدخل الاسم"></div>
+          </div>
+          <div class="form-group">
+            <label>البريد الإلكتروني أو الهاتف</label>
+            <div class="input-wrap"><i class="fa-solid fa-envelope input-icon"></i><input type="text" placeholder="البريد أو الهاتف"></div>
+          </div>
+          <div class="form-group">
+            <label>كلمة المرور المؤقتة</label>
+            <div class="input-wrap"><i class="fa-solid fa-lock input-icon"></i><input type="password" placeholder="••••••••"></div>
+          </div>
+          <div class="form-group">
+            <label>الدور الوظيفي</label>
+            <div class="select-wrap">
+              <select>
+                <option>صيدلاني</option>
+                <option>مساعد صيدلاني</option>
+                <option>كاشير</option>
+              </select>
+              <i class="fa-solid fa-chevron-down select-icon"></i>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="toggleModal('modal-add-user'); showToast('تمت إضافة الموظف بنجاح ✓')">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>إضافة الموظف</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 6. DASHBOARD SCREEN                                          -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-dashboard">
+    <div class="inner-screen with-nav">
+      <div class="dash-header">
+        <div class="dash-header-right">
+          <div class="dash-greeting">مساء الخير،</div>
+          <div class="dash-name">أ. أكرم الحسن <i class="fa-solid fa-hand-sparkles"></i></div>
+        </div>
+        <div class="dash-header-left">
+          <button class="notif-btn" id="notif-btn" onclick="NotifUI.open()">
+            <i class="fa-solid fa-bell"></i>
+            <span class="notif-badge" id="notif-badge">0</span>
+          </button>
+          <div class="dash-avatar">أ</div>
+        </div>
+      </div>
+
+      <div class="content-area">
+        <!-- Pharmacy Banner -->
+        <div class="pharmacy-banner">
+          <div class="pharmacy-banner-content">
+            <div class="pharmacy-banner-icon"><i class="fa-solid fa-store-alt"></i></div>
+            <div>
+              <div class="pharmacy-banner-name">صيدلية الشفاء</div>
+              <div class="pharmacy-banner-date">الأحد، 22 مارس 2026</div>
+            </div>
+          </div>
+          <div class="pharmacy-banner-badge active-badge">نشط</div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card teal">
+            <div class="stat-icon"><i class="fa-solid fa-pills"></i></div>
+            <div class="stat-value" id="dash-stat-drugs">10</div>
+            <div class="stat-label">إجمالي الأدوية</div>
+            <div class="stat-trend up">مخزون حالي</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="stat-value" id="dash-stat-low">—</div>
+            <div class="stat-label">مخزون منخفض</div>
+            <div class="stat-trend warn">يحتاج تجديد</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+            <div class="stat-value">38</div>
+            <div class="stat-label">مبيعات اليوم</div>
+            <div class="stat-trend up">↑ 8% أمس</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+            <div class="stat-value" id="dash-stat-expiring">—</div>
+            <div class="stat-label">ينتهي قريباً</div>
+            <div class="stat-trend warn">خلال 30 يوم</div>
+          </div>
+        </div>
+
+        <!-- Alerts Section -->
+        <div class="section-header">
+          <span class="section-title">التنبيهات العاجلة</span>
+          <button class="see-all-btn" onclick="navigate('screen-inventory')">عرض الكل</button>
+        </div>
+        <div class="alerts-list" id="dash-alerts-list">
+          <div class="alert-item" style="justify-content:center;padding:16px">
+            <span style="color:var(--text-muted);font-size:14px">جاري التحميل...</span>
+          </div>
+        </div>
+
+        <!-- Recent Sales -->
+        <div class="section-header">
+          <span class="section-title">آخر المبيعات</span>
+          <button class="see-all-btn" onclick="navigate('screen-invoices')">عرض الكل</button>
+        </div>
+        <div class="recent-sales">
+          <div class="sale-item">
+            <div class="sale-info">
+              <div class="sale-time">منذ 20 دقيقة</div>
+              <div class="sale-items-count">3 أصناف</div>
+            </div>
+            <div class="sale-amount">12,500 ل.س</div>
+          </div>
+          <div class="sale-item">
+            <div class="sale-info">
+              <div class="sale-time">منذ 45 دقيقة</div>
+              <div class="sale-items-count">1 صنف</div>
+            </div>
+            <div class="sale-amount">8,000 ل.س</div>
+          </div>
+          <div class="sale-item">
+            <div class="sale-info">
+              <div class="sale-time">منذ ساعة</div>
+              <div class="sale-items-count">5 أصناف</div>
+            </div>
+            <div class="sale-amount">27,300 ل.س</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Navigation -->
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 7. INVENTORY SCREEN                                          -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-inventory">
+    <div class="inner-screen with-nav">
+      <div class="top-bar">
+        <button class="back-btn" onclick="navigate('screen-dashboard')">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <h1 class="top-bar-title">المخزن</h1>
+        <button class="icon-btn-primary" onclick="navigate('screen-add-drug')">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="content-area">
+        <!-- Search -->
+        <div class="search-bar-wrap">
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="inv-search-input" placeholder="ابحث عن دواء، باركود، شركة...">
+            <button class="search-filter-btn" onclick="showToast('فتح الفلاتر')" style="margin-left:6px"><i class="fa-solid fa-sliders"></i></button>
+            <button class="scan-btn" id="inv-scan-btn" title="مسح الباركود"
+              onclick="BarcodeScanner.openForInventorySearch(document.getElementById('inv-search-input'))">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="1" y="4" width="2" height="16" rx="0.5" fill="white"/><rect x="4.5" y="4" width="1" height="16" rx="0.5" fill="white"/><rect x="7" y="4" width="2.5" height="16" rx="0.5" fill="white"/><rect x="11" y="4" width="1" height="16" rx="0.5" fill="white"/><rect x="13.5" y="4" width="2" height="16" rx="0.5" fill="white"/><rect x="17" y="4" width="1" height="16" rx="0.5" fill="white"/><rect x="19.5" y="4" width="1.5" height="16" rx="0.5" fill="white"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="chip-row scrollable">
+          <button class="chip active">الكل <span class="chip-count">247</span></button>
+          <button class="chip">منخفض <span class="chip-count warn">14</span></button>
+          <button class="chip">ينتهي قريباً <span class="chip-count warn">7</span></button>
+          <button class="chip">مضافة اليوم <span class="chip-count">3</span></button>
+        </div>
+
+        <!-- Drug Cards — rendered dynamically by InventoryUI.render() -->
+        <div class="drug-list" id="drug-list">
+          <div class="empty-state">
+            <div class="empty-icon"><i class="fa-solid fa-pills"></i></div>
+            <div class="empty-title">جاري تحميل المخزن...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 8. ADD / EDIT DRUG SCREEN                                    -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-add-drug">
+    <div class="inner-screen">
+      <div class="top-bar">
+        <button class="back-btn" onclick="navigate('screen-inventory')">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <h1 class="top-bar-title">إضافة دواء جديد</h1>
+        <div></div>
+      </div>
+
+      <div class="content-area pb-nav">
+        <div class="drug-form-hero">
+          <div class="drug-form-icon-wrap">
+            <div class="drug-form-icon"><i class="fa-solid fa-pills"></i></div>
+            <button class="drug-form-icon-edit"><i class="fa-solid fa-camera"></i></button>
+          </div>
+          <p>اختر أيقونة الدواء</p>
+        </div>
+
+        <form id="drug-form" onsubmit="return false;">
+        <div class="form-section-title">المعلومات الأساسية</div>
+        <div class="form-group">
+          <label>اسم الدواء *</label>
+          <div class="input-wrap"><i class="fa-solid fa-pills input-icon"></i>
+            <input id="drug-name-input" type="text" placeholder="اسم الدواء">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>التصنيف</label>
+          <div class="select-wrap">
+            <select id="drug-category-input">
+              <option>مسكن ألم</option>
+              <option>مضاد حيوي</option>
+              <option>فيتامينات</option>
+              <option>أمراض مزمنة</option>
+              <option>جهاز هضمي</option>
+              <option>أمراض قلب</option>
+              <option>حساسية</option>
+              <option>عام</option>
+            </select>
+            <i class="fa-solid fa-chevron-down select-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>الشركة المصنعة</label>
+          <div class="input-wrap"><i class="fa-solid fa-industry input-icon"></i>
+            <input id="drug-company-input" type="text" placeholder="اسم الشركة">
+          </div>
+        </div>
+
+        <div class="form-section-title">المخزون والأسعار</div>
+        <div class="form-group">
+          <label>الحد الأدنى للتنبيه</label>
+          <div class="input-wrap"><i class="fa-solid fa-arrow-down input-icon"></i>
+            <input id="drug-minqty-input" type="number" placeholder="10" min="0">
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>سعر الشراء (ل.س)</label>
+            <div class="input-wrap"><i class="fa-solid fa-tag input-icon"></i>
+              <input id="drug-buy-input" type="number" placeholder="0" min="0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>سعر البيع (ل.س)</label>
+            <div class="input-wrap"><i class="fa-solid fa-dollar-sign input-icon"></i>
+              <input id="drug-sell-input" type="number" placeholder="0" min="0">
+            </div>
+          </div>
+        </div>
+        <div class="profit-preview">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>هامش الربح: <strong class="profit-val">0 ل.س (0%)</strong></span>
+        </div>
+
+        <div class="form-section-title">الباركود</div>
+        <div class="form-group">
+          <label>الباركود</label>
+          <div class="input-wrap with-scan">
+            <i class="fa-solid fa-barcode input-icon"></i>
+            <input type="text" id="drug-barcode-input" placeholder="رقم الباركود"
+              inputmode="numeric" autocomplete="off">
+            <button class="scan-btn" id="drug-scan-btn"
+              onclick="BarcodeScanner.openForDrugForm(document.getElementById('drug-barcode-input'))"
+              title="مسح الباركود بالكاميرا" type="button">
+              <i class="fa-solid fa-camera" style="font-size:16px"></i>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="scan-standalone-btn" type="button"
+            onclick="BarcodeScanner.openForDrugForm(document.getElementById('drug-barcode-input'))">
+            <i class="fa-solid fa-barcode"></i>
+            <span>مسح الباركود بالكاميرا</span>
+            <span style="font-size:11px;font-weight:500;opacity:0.7;margin-right:auto">EAN · Code-128</span>
+          </button>
+        </div>
+
+        <div class="form-section-title" style="display:flex;align-items:center;justify-content:space-between">
+          <span>الدفعات</span>
+          <span id="batches-total" style="font-size:12px;color:var(--primary);font-weight:600"></span>
+        </div>
+        <div id="batches-list"></div>
+        <button type="button" class="batch-add-btn" onclick="BatchesUI.addBatch()">
+          <i class="fa-solid fa-plus"></i>
+          <span>إضافة دفعة</span>
+        </button>
+        <div class="form-group">
+          <label>ملاحظات</label>
+          <textarea id="drug-notes-input" class="textarea-input" placeholder="أي ملاحظات إضافية حول هذا الدواء..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-primary" type="button" onclick="AddDrugUI.save()">
+            <i class="fa-solid fa-save"></i>
+            <span>حفظ الدواء</span>
+          </button>
+          <button class="btn-ghost" type="button" onclick="navigate('screen-inventory')">إلغاء</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 9. SALES / INVOICE SCREEN                                    -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-sales">
+    <div class="inner-screen with-nav">
+      <div class="top-bar">
+        <button class="back-btn" onclick="navigate('screen-dashboard')">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <h1 class="top-bar-title">فاتورة جديدة <span class="invoice-num">#1083</span></h1>
+        <button class="text-btn" onclick="navigate('screen-invoices')">السجل</button>
+      </div>
+
+      <div class="sales-layout">
+        <!-- Search Drug -->
+        <div class="sales-search-wrap">
+          <div class="sales-search-row">
+            <div class="search-bar sales-search-bar">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" placeholder="ابحث باسم الدواء أو الباركود..." id="sales-search"
+                oninput="SalesUI.onSearch(this.value)">
+            </div>
+            <button class="scan-btn sales-scan-btn"
+              onclick="BarcodeScanner.openForSales()"
+              title="مسح بالكاميرا">
+              <i class="fa-solid fa-barcode"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Available Drugs List -->
+        <div class="sales-drugs-section">
+          <div class="sales-drugs-header">
+            <span class="sales-drugs-title"><i class="fa-solid fa-boxes-stacked"></i> الأدوية المتوفرة</span>
+            <span class="sales-drugs-count" id="sales-drugs-count">—</span>
+          </div>
+          <div class="sales-drugs-list" id="sales-drugs-list">
+            <div class="sales-drug-loading">
+              <div class="sdl-spinner"></div>
+              <span>جاري تحميل الأدوية...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Items -->
+        <div class="cart-section">
+          <div class="cart-header">
+            <span class="cart-title"><i class="fa-solid fa-cart-shopping"></i> السلة</span>
+            <span class="cart-count" id="cart-count">2 أصناف</span>
+          </div>
+          <div class="cart-list" id="cart-list">
+            <div class="cart-item">
+              <div class="cart-item-info">
+                <div class="cart-item-name">باراسيتامول 500mg</div>
+                <div class="cart-item-price">3,500 ل.س / قطعة</div>
+              </div>
+              <div class="cart-item-controls">
+                <button class="qty-btn minus" onclick="changeQty(this, -1)"><i class="fa-solid fa-minus"></i></button>
+                <span class="qty-val">2</span>
+                <button class="qty-btn plus" onclick="changeQty(this, 1)"><i class="fa-solid fa-plus"></i></button>
+              </div>
+              <div class="cart-item-total">7,000 ل.س</div>
+              <button class="cart-remove" onclick="removeCartItem(this)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="cart-item">
+              <div class="cart-item-info">
+                <div class="cart-item-name">فيتامين C 1000mg</div>
+                <div class="cart-item-price">4,500 ل.س / قطعة</div>
+              </div>
+              <div class="cart-item-controls">
+                <button class="qty-btn minus" onclick="changeQty(this, -1)"><i class="fa-solid fa-minus"></i></button>
+                <span class="qty-val">1</span>
+                <button class="qty-btn plus" onclick="changeQty(this, 1)"><i class="fa-solid fa-plus"></i></button>
+              </div>
+              <div class="cart-item-total">4,500 ل.س</div>
+              <button class="cart-remove" onclick="removeCartItem(this)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer & Payment -->
+        <div class="payment-section">
+          <div class="form-group">
+            <label>اسم العميل (اختياري)</label>
+            <div class="input-wrap"><i class="fa-solid fa-user input-icon"></i><input type="text" placeholder="أدخل اسم العميل"></div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>الخصم (ل.س)</label>
+              <div class="input-wrap"><i class="fa-solid fa-percent input-icon"></i><input type="number" placeholder="0" value="0" oninput="calcTotal()"></div>
+            </div>
+            <div class="form-group">
+              <label>طريقة الدفع</label>
+              <div class="select-wrap">
+                <select>
+                  <option>نقداً</option>
+                  <option>بطاقة</option>
+                  <option>تحويل</option>
+                  <option>آجل</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-icon"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Totals -->
+          <div class="invoice-totals">
+            <div class="total-row"><span>المجموع الفرعي</span><strong>11,500 ل.س</strong></div>
+            <div class="total-row"><span>الخصم</span><strong class="discount">0 ل.س</strong></div>
+            <div class="total-row grand"><span>الإجمالي</span><strong class="grand-total">11,500 ل.س</strong></div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="invoice-actions">
+            <button class="btn-primary btn-large" onclick="InvoiceUI.confirm()">
+              <i class="fa-solid fa-check-circle"></i>
+              <span>تأكيد الفاتورة</span>
+            </button>
+            <div class="invoice-secondary-actions">
+              <button class="btn-outline" onclick="showToast('جاري الطباعة...')">
+                <i class="fa-solid fa-print"></i> طباعة
+              </button>
+              <button class="btn-outline" onclick="showToast('جاري المشاركة...')">
+                <i class="fa-solid fa-share-nodes"></i> مشاركة
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 10. INVOICE HISTORY SCREEN                                   -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-invoices">
+    <div class="inner-screen with-nav">
+      <div class="top-bar">
+        <button class="back-btn" onclick="navigate('screen-dashboard')">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <h1 class="top-bar-title">سجل الفواتير</h1>
+        <button class="icon-btn-primary" onclick="navigate('screen-sales')">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+
+      <div class="content-area">
+        <div class="search-bar-wrap">
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" placeholder="بحث برقم الفاتورة أو اسم العميل...">
+          </div>
+        </div>
+
+        <!-- Date Filter -->
+        <div class="chip-row">
+          <button class="chip active">اليوم</button>
+          <button class="chip">الأسبوع</button>
+          <button class="chip">الشهر</button>
+          <button class="chip">كل الوقت</button>
+        </div>
+
+        <!-- Summary Bar -->
+        <div class="inv-summary-bar">
+          <div class="isb-item"><span class="isb-val">38</span><span class="isb-label">فاتورة</span></div>
+          <div class="isb-divider"></div>
+          <div class="isb-item"><span class="isb-val teal">185,000</span><span class="isb-label">ل.س إجمالي</span></div>
+          <div class="isb-divider"></div>
+          <div class="isb-item"><span class="isb-val green">4,868</span><span class="isb-label">ل.س متوسط</span></div>
+        </div>
+
+        <!-- Invoice List -->
+        <div class="invoice-list">
+          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1083')">
+            <div class="inv-num-col">
+              <div class="inv-num">#1083</div>
+              <div class="inv-time">10:42 ص</div>
+            </div>
+            <div class="inv-details">
+              <div class="inv-customer">أحمد محمد</div>
+              <div class="inv-items">3 أصناف • نقداً</div>
+            </div>
+            <div class="inv-right">
+              <div class="inv-amount">12,500</div>
+              <span class="inv-status paid">مدفوع</span>
+            </div>
+          </div>
+
+          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1082')">
+            <div class="inv-num-col">
+              <div class="inv-num">#1082</div>
+              <div class="inv-time">10:15 ص</div>
+            </div>
+            <div class="inv-details">
+              <div class="inv-customer">عميل عام</div>
+              <div class="inv-items">1 صنف • نقداً</div>
+            </div>
+            <div class="inv-right">
+              <div class="inv-amount">8,000</div>
+              <span class="inv-status paid">مدفوع</span>
+            </div>
+          </div>
+
+          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1081')">
+            <div class="inv-num-col">
+              <div class="inv-num">#1081</div>
+              <div class="inv-time">09:50 ص</div>
+            </div>
+            <div class="inv-details">
+              <div class="inv-customer">ليلى خالد</div>
+              <div class="inv-items">5 أصناف • بطاقة</div>
+            </div>
+            <div class="inv-right">
+              <div class="inv-amount">27,300</div>
+              <span class="inv-status paid">مدفوع</span>
+            </div>
+          </div>
+
+          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1080')">
+            <div class="inv-num-col">
+              <div class="inv-num">#1080</div>
+              <div class="inv-time">09:20 ص</div>
+            </div>
+            <div class="inv-details">
+              <div class="inv-customer">عمر سامي</div>
+              <div class="inv-items">2 أصناف • آجل</div>
+            </div>
+            <div class="inv-right">
+              <div class="inv-amount">15,000</div>
+              <span class="inv-status pending">آجل</span>
+            </div>
+          </div>
+
+          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1079')">
+            <div class="inv-num-col">
+              <div class="inv-num">#1079</div>
+              <div class="inv-time">08:55 ص</div>
+            </div>
+            <div class="inv-details">
+              <div class="inv-customer">مريم علي</div>
+              <div class="inv-items">4 أصناف • تحويل</div>
+            </div>
+            <div class="inv-right">
+              <div class="inv-amount">33,200</div>
+              <span class="inv-status paid">مدفوع</span>
+            </div>
+          </div>
+
+          <div class="invoice-item" onclick="showToast('عرض تفاصيل الفاتورة #1078')">
+            <div class="inv-num-col">
+              <div class="inv-num">#1078</div>
+              <div class="inv-time">أمس</div>
+            </div>
+            <div class="inv-details">
+              <div class="inv-customer">عميل عام</div>
+              <div class="inv-items">6 أصناف • نقداً</div>
+            </div>
+            <div class="inv-right">
+              <div class="inv-amount">42,800</div>
+              <span class="inv-status paid">مدفوع</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 11. REPORTS SCREEN                                           -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-reports">
+    <div class="inner-screen with-nav">
+      <div class="top-bar">
+        <button class="back-btn" onclick="navigate('screen-dashboard')">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <h1 class="top-bar-title">التقارير والإحصاءات</h1>
+        <button class="text-btn" onclick="showToast('تصدير التقرير')"><i class="fa-solid fa-download"></i></button>
+      </div>
+
+      <div class="content-area">
+        <!-- Period Selector -->
+        <div class="period-selector">
+          <button class="period-btn active">يومي</button>
+          <button class="period-btn">أسبوعي</button>
+          <button class="period-btn">شهري</button>
+          <button class="period-btn">سنوي</button>
+        </div>
+
+        <!-- Revenue Card -->
+        <div class="revenue-card">
+          <div class="revenue-card-header">
+            <div>
+              <div class="rc-label">إجمالي المبيعات</div>
+              <div class="rc-value">185,400 <span>ل.س</span></div>
+            </div>
+            <div class="rc-trend up">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+              <span>+18.4%</span>
+            </div>
+          </div>
+          <!-- Mini Chart SVG -->
+          <div class="mini-chart">
+            <svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgba(255,255,255,0.4)"/>
+                  <stop offset="100%" stop-color="rgba(255,255,255,0.0)"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,60 C30,50 60,40 90,45 C120,50 150,20 180,25 C210,30 240,15 300,10 L300,80 L0,80 Z" fill="url(#chartGrad)" opacity="0.5"/>
+              <path d="M0,60 C30,50 60,40 90,45 C120,50 150,20 180,25 C210,30 240,15 300,10" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="300" cy="10" r="4" fill="white"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon teal"><i class="fa-solid fa-receipt"></i></div>
+            <div class="kpi-val">38</div>
+            <div class="kpi-label">الفواتير</div>
+            <div class="kpi-change up">↑ 12%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon blue"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="kpi-val">47,300</div>
+            <div class="kpi-label">الأرباح الصافية</div>
+            <div class="kpi-change up">↑ 8%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon orange"><i class="fa-solid fa-user"></i></div>
+            <div class="kpi-val">31</div>
+            <div class="kpi-label">العملاء</div>
+            <div class="kpi-change up">↑ 5%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-icon purple"><i class="fa-solid fa-pills"></i></div>
+            <div class="kpi-val">142</div>
+            <div class="kpi-label">وحدات مباعة</div>
+            <div class="kpi-change down">↓ 2%</div>
+          </div>
+        </div>
+
+        <!-- Bar Chart - Sales by Day -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <span class="chart-title">المبيعات اليومية (ل.س)</span>
+            <span class="chart-period">هذا الأسبوع</span>
+          </div>
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar" style="height:45%"><div class="bar-fill teal"></div></div>
+              <div class="bar-label">أحد</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar" style="height:65%"><div class="bar-fill teal"></div></div>
+              <div class="bar-label">اثن</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar" style="height:55%"><div class="bar-fill teal"></div></div>
+              <div class="bar-label">ثلا</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar" style="height:80%"><div class="bar-fill teal"></div></div>
+              <div class="bar-label">أرب</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar" style="height:70%"><div class="bar-fill teal"></div></div>
+              <div class="bar-label">خمي</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar" style="height:90%"><div class="bar-fill accent"></div></div>
+              <div class="bar-label current">جمع</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar" style="height:60%"><div class="bar-fill teal"></div></div>
+              <div class="bar-label">سبت</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Selling Drugs -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <span class="chart-title">أكثر الأدوية مبيعاً</span>
+            <button class="see-all-btn" onclick="showToast('عرض التقرير الكامل')">التفاصيل</button>
+          </div>
+          <div class="top-drugs-list">
+            <div class="top-drug-item">
+              <span class="rank rank-1">1</span>
+              <div class="td-info">
+                <div class="td-name">باراسيتامول 500mg</div>
+                <div class="td-bar"><div class="td-bar-fill" style="width:92%"></div></div>
+              </div>
+              <div class="td-qty">92 وحدة</div>
+            </div>
+            <div class="top-drug-item">
+              <span class="rank rank-2">2</span>
+              <div class="td-info">
+                <div class="td-name">فيتامين C 1000mg</div>
+                <div class="td-bar"><div class="td-bar-fill" style="width:74%"></div></div>
+              </div>
+              <div class="td-qty">74 وحدة</div>
+            </div>
+            <div class="top-drug-item">
+              <span class="rank rank-3">3</span>
+              <div class="td-info">
+                <div class="td-name">أموكسيسيلين 250mg</div>
+                <div class="td-bar"><div class="td-bar-fill" style="width:58%"></div></div>
+              </div>
+              <div class="td-qty">58 وحدة</div>
+            </div>
+            <div class="top-drug-item">
+              <span class="rank">4</span>
+              <div class="td-info">
+                <div class="td-name">ميتفورمين 850mg</div>
+                <div class="td-bar"><div class="td-bar-fill" style="width:43%"></div></div>
+              </div>
+              <div class="td-qty">43 وحدة</div>
+            </div>
+            <div class="top-drug-item">
+              <span class="rank">5</span>
+              <div class="td-info">
+                <div class="td-name">أوميبرازول 20mg</div>
+                <div class="td-bar"><div class="td-bar-fill" style="width:35%"></div></div>
+              </div>
+              <div class="td-qty">35 وحدة</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Methods Donut -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <span class="chart-title">طرق الدفع</span>
+          </div>
+          <div class="payment-methods">
+            <div class="pm-item">
+              <div class="pm-icon cash"><i class="fa-solid fa-money-bills"></i></div>
+              <div class="pm-info"><div class="pm-label">نقداً</div><div class="pm-bar"><div class="pm-fill" style="width:65%"></div></div></div>
+              <div class="pm-pct">65%</div>
+            </div>
+            <div class="pm-item">
+              <div class="pm-icon card"><i class="fa-solid fa-credit-card"></i></div>
+              <div class="pm-info"><div class="pm-label">بطاقة</div><div class="pm-bar"><div class="pm-fill blue" style="width:22%"></div></div></div>
+              <div class="pm-pct">22%</div>
+            </div>
+            <div class="pm-item">
+              <div class="pm-icon transfer"><i class="fa-solid fa-mobile-screen"></i></div>
+              <div class="pm-info"><div class="pm-label">تحويل</div><div class="pm-bar"><div class="pm-fill purple" style="width:8%"></div></div></div>
+              <div class="pm-pct">8%</div>
+            </div>
+            <div class="pm-item">
+              <div class="pm-icon pending"><i class="fa-solid fa-clock"></i></div>
+              <div class="pm-info"><div class="pm-label">آجل</div><div class="pm-bar"><div class="pm-fill orange" style="width:5%"></div></div></div>
+              <div class="pm-pct">5%</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 12. PROFILE / SETTINGS SCREEN                                -->
+  <!-- ============================================================ -->
+  <div class="screen" id="screen-profile">
+    <div class="inner-screen with-nav">
+      <div class="top-bar">
+        <div></div>
+        <h1 class="top-bar-title">الملف الشخصي</h1>
+        <button class="text-btn" onclick="showToast('حفظ الإعدادات')"><i class="fa-solid fa-check"></i></button>
+      </div>
+
+      <div class="content-area">
+        <!-- Profile Hero -->
+        <div class="profile-hero">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar">أ</div>
+            <button class="profile-avatar-edit" onclick="showToast('تغيير الصورة الشخصية')">
+              <i class="fa-solid fa-camera"></i>
+            </button>
+          </div>
+          <div class="profile-name">أ. أكرم الحسن</div>
+          <div class="profile-role"><i class="fa-solid fa-crown"></i> مالك الصيدلية</div>
+          <div class="profile-pharmacy"><i class="fa-solid fa-store"></i> صيدلية الشفاء</div>
+        </div>
+
+        <!-- Pharmacy Info Card -->
+        <div class="settings-section-title">بيانات الصيدلية</div>
+        <div class="settings-card">
+          <div class="settings-row" onclick="showToast('تعديل اسم الصيدلية')">
+            <div class="sr-left"><i class="fa-solid fa-store sr-icon teal"></i><span>اسم الصيدلية</span></div>
+            <div class="sr-right"><span class="sr-val">صيدلية الشفاء</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+          <div class="settings-row" onclick="showToast('تعديل رقم الترخيص')">
+            <div class="sr-left"><i class="fa-solid fa-id-card sr-icon teal"></i><span>رقم الترخيص</span></div>
+            <div class="sr-right"><span class="sr-val">SY-2024-001</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+          <div class="settings-row" onclick="showToast('تعديل العنوان')">
+            <div class="sr-left"><i class="fa-solid fa-location-dot sr-icon teal"></i><span>العنوان</span></div>
+            <div class="sr-right"><span class="sr-val">دمشق، المزة</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+        </div>
+
+        <!-- User Info Card -->
+        <div class="settings-section-title">بيانات المستخدم</div>
+        <div class="settings-card">
+          <div class="settings-row" onclick="showToast('تعديل الاسم')">
+            <div class="sr-left"><i class="fa-solid fa-user sr-icon blue"></i><span>الاسم</span></div>
+            <div class="sr-right"><span class="sr-val">أ. أكرم الحسن</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+          <div class="settings-row" onclick="showToast('تعديل البريد الإلكتروني')">
+            <div class="sr-left"><i class="fa-solid fa-envelope sr-icon blue"></i><span>البريد الإلكتروني</span></div>
+            <div class="sr-right"><span class="sr-val">akram@saydalati.com</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+          <div class="settings-row" onclick="showToast('تعديل رقم الهاتف')">
+            <div class="sr-left"><i class="fa-solid fa-phone sr-icon blue"></i><span>رقم الهاتف</span></div>
+            <div class="sr-right"><span class="sr-val">0912345678</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+          <div class="settings-row" onclick="showToast('تغيير كلمة المرور')">
+            <div class="sr-left"><i class="fa-solid fa-lock sr-icon blue"></i><span>كلمة المرور</span></div>
+            <div class="sr-right"><span class="sr-val">••••••••</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+        </div>
+
+        <!-- App Settings -->
+        <div class="settings-section-title">إعدادات التطبيق</div>
+        <div class="settings-card">
+          <div class="settings-row toggle-row">
+            <div class="sr-left"><i class="fa-solid fa-moon sr-icon purple"></i><span>الوضع الليلي</span></div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+          <div class="settings-row toggle-row">
+            <div class="sr-left"><i class="fa-solid fa-bell sr-icon orange"></i><span>الإشعارات</span></div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+          <div class="settings-row toggle-row">
+            <div class="sr-left"><i class="fa-solid fa-volume-high sr-icon orange"></i><span>صوت التنبيهات</span></div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+          <div class="settings-row" onclick="showToast('إعداد عملة التطبيق')">
+            <div class="sr-left"><i class="fa-solid fa-coins sr-icon green"></i><span>العملة</span></div>
+            <div class="sr-right"><span class="sr-val">الليرة السورية (ل.س)</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+        </div>
+
+        <!-- Management -->
+        <div class="settings-section-title">الإدارة</div>
+        <div class="settings-card">
+          <div class="settings-row" onclick="navigate('screen-users')">
+            <div class="sr-left"><i class="fa-solid fa-users sr-icon teal"></i><span>إدارة المستخدمين</span></div>
+            <div class="sr-right"><span class="sr-badge">3</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+          <div class="settings-row" onclick="showToast('نسخ احتياطي جاري...')">
+            <div class="sr-left"><i class="fa-solid fa-cloud-arrow-up sr-icon blue"></i><span>نسخ احتياطي</span></div>
+            <div class="sr-right"><span class="sr-val">آخر نسخة: اليوم</span><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+          <div class="settings-row" onclick="showToast('فتح مركز المساعدة')">
+            <div class="sr-left"><i class="fa-solid fa-circle-question sr-icon gray"></i><span>المساعدة والدعم</span></div>
+            <div class="sr-right"><i class="fa-solid fa-chevron-left sr-arrow"></i></div>
+          </div>
+        </div>
+
+        <!-- App version -->
+        <div class="app-version">صيدليتي v2.1.0 • بني بـ ❤️</div>
+
+        <!-- Logout -->
+        <button class="btn-logout" onclick="navigate('screen-login'); showToast('تم تسجيل الخروج بنجاح')">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>تسجيل الخروج</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #app -->
+
+<!-- ===== NOTIFICATIONS SHEET ===== -->
+<div class="notif-sheet-overlay" id="notif-sheet-overlay" onclick="NotifUI.close()">
+  <div class="notif-sheet" id="notif-sheet" onclick="event.stopPropagation()">
+    <div class="notif-sheet-header">
+      <h3 class="notif-sheet-title">الإشعارات والتنبيهات</h3>
+      <button class="notif-sheet-close" onclick="NotifUI.close()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="notif-sheet-body" id="notif-sheet-body">
+      <div class="notif-loading">
+        <div class="notif-spinner"></div>
+        <span>جاري التحميل...</span>
+      </div>
+    </div>
+    <div class="notif-sheet-handle"></div>
+  </div>
+</div>
+
+<!-- ===== TOAST NOTIFICATION ===== -->
+<div class="toast" id="toast"></div>
+
+<script src="db.js"></script>
+<script src="app.js"></script>
+<script src="scanner.js"></script>
+
+<!-- ===== GLOBAL BOTTOM NAV (viewport-fixed, outside all scroll contexts) ===== -->
+<nav class="bottom-nav" id="global-bottom-nav">
+  <button class="nav-item" id="nav-btn-dashboard" onclick="navigate('screen-dashboard')">
+    <i class="fa-solid fa-house"></i><span>الرئيسية</span>
+  </button>
+  <button class="nav-item" id="nav-btn-inventory" onclick="navigate('screen-inventory')">
+    <i class="fa-solid fa-boxes-stacked"></i><span>المخزن</span>
+  </button>
+  <button class="nav-item nav-center-btn" id="nav-btn-sales" onclick="navigate('screen-sales')">
+    <div class="nav-fab"><i class="fa-solid fa-plus"></i></div>
+  </button>
+  <button class="nav-item" id="nav-btn-reports" onclick="navigate('screen-reports')">
+    <i class="fa-solid fa-chart-bar"></i><span>التقارير</span>
+  </button>
+  <button class="nav-item" id="nav-btn-profile" onclick="navigate('screen-profile')">
+    <i class="fa-solid fa-user-circle"></i><span>حسابي</span>
+  </button>
+</nav>
+</body>
+</html>
